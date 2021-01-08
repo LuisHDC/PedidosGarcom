@@ -1,17 +1,17 @@
 ﻿@model SistemaPedidos.Models.Pedido
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Criar";
 }
 
-<h2>Create</h2>
+<h2>Criar</h2>
 
 <h4>Pedido</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div asp-validation-summary="None" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Prato" class="control-label"></label>
                 <input asp-for="Prato" class="form-control" />
@@ -39,18 +39,23 @@
             </div>
             <div class="form-group">
                 <label asp-for="Status" class="control-label"></label>
-                <select asp-for="Status" class="form-control"></select>
-                <span asp-validation-for="Status" class="text-danger"></span>
+                <select asp-for="Status">
+                    <option value="0">Pendente</option>
+                    <option value="1">VisualizadoPelaCozinha</option>
+                    <option value="2">PegandoBebidaNaCopa</option>
+                    <option value="3">PratoPronto</option>
+                    <option value="4">Entregue</option>
+                </select>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Criar" class="btn btn-default" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Voltar para a lista</a>
 </div>
 
 @section Scripts {

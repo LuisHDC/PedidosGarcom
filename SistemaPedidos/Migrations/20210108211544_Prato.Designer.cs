@@ -2,39 +2,29 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SistemaPedidos.Data;
 
 namespace SistemaPedidos.Migrations
 {
     [DbContext(typeof(SistemaPedidosContext))]
-    partial class SistemaPedidosContextModelSnapshot : ModelSnapshot
+    [Migration("20210108211544_Prato")]
+    partial class Prato
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.1.14-servicing-32113")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("SistemaPedidos.Models.Bebida", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Nome");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Bebida");
-                });
-
             modelBuilder.Entity("SistemaPedidos.Models.Pedido", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("BebidaID");
+                    b.Property<string>("Bebida");
 
                     b.Property<DateTime>("Date");
 
@@ -42,15 +32,11 @@ namespace SistemaPedidos.Migrations
 
                     b.Property<string>("NomeDoSolicitante");
 
-                    b.Property<int?>("PratoId");
+                    b.Property<string>("Prato");
 
                     b.Property<int>("Status");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BebidaID");
-
-                    b.HasIndex("PratoId");
 
                     b.ToTable("pedido");
                 });
@@ -64,18 +50,7 @@ namespace SistemaPedidos.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("prato");
-                });
-
-            modelBuilder.Entity("SistemaPedidos.Models.Pedido", b =>
-                {
-                    b.HasOne("SistemaPedidos.Models.Bebida", "Bebida")
-                        .WithMany()
-                        .HasForeignKey("BebidaID");
-
-                    b.HasOne("SistemaPedidos.Models.Prato", "Prato")
-                        .WithMany()
-                        .HasForeignKey("PratoId");
+                    b.ToTable("cardapio");
                 });
 #pragma warning restore 612, 618
         }

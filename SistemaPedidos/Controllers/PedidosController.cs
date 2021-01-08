@@ -22,7 +22,7 @@ namespace SistemaPedidos.Controllers
         // GET: Pedidos
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Pedido.ToListAsync());
+            return View(await _context.pedido.ToListAsync());
         }
 
         // GET: Pedidos/Details/5
@@ -33,7 +33,7 @@ namespace SistemaPedidos.Controllers
                 return NotFound();
             }
 
-            var pedido = await _context.Pedido
+            var pedido = await _context.pedido
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (pedido == null)
             {
@@ -73,7 +73,7 @@ namespace SistemaPedidos.Controllers
                 return NotFound();
             }
 
-            var pedido = await _context.Pedido.FindAsync(id);
+            var pedido = await _context.pedido.FindAsync(id);
             if (pedido == null)
             {
                 return NotFound();
@@ -124,7 +124,7 @@ namespace SistemaPedidos.Controllers
                 return NotFound();
             }
 
-            var pedido = await _context.Pedido
+            var pedido = await _context.pedido
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (pedido == null)
             {
@@ -139,15 +139,66 @@ namespace SistemaPedidos.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var pedido = await _context.Pedido.FindAsync(id);
-            _context.Pedido.Remove(pedido);
+            var pedido = await _context.pedido.FindAsync(id);
+            _context.pedido.Remove(pedido);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool PedidoExists(int id)
         {
-            return _context.Pedido.Any(e => e.Id == id);
+            return _context.pedido.Any(e => e.Id == id);
+        }
+
+        // GET: Pedidos/AtualizarStatus/5
+        public async Task<IActionResult> AtualizarStatus(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var pedido = await _context.pedido.FindAsync(id);
+            if (pedido == null)
+            {
+                return NotFound();
+            }
+            return View(pedido);
+        }
+
+        // POST: Pedidos/AtualizarStatus/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AtualizarStatus(int id, Pedido pedido)
+        {
+            if (id != pedido.Id)
+            {
+                return NotFound();
+            }
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    pedido.Status++;
+                    _context.Update(pedido);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!PedidoExists(pedido.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return RedirectToAction(nameof(Index));
         }
     }
 }

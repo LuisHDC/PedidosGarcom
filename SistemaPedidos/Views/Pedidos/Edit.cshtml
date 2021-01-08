@@ -1,10 +1,10 @@
 ﻿@model SistemaPedidos.Models.Pedido
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar";
 }
 
-<h2>Edit</h2>
+<h2>Editar</h2>
 
 <h4>Pedido</h4>
 <hr />
@@ -40,18 +40,23 @@
             </div>
             <div class="form-group">
                 <label asp-for="Status" class="control-label"></label>
-                <select asp-for="Status" class="form-control"></select>
-                <span asp-validation-for="Status" class="text-danger"></span>
+                <select asp-for="Status">
+                    <option value="0">Pendente</option>
+                    <option value="1">VisualizadoPelaCozinha</option>
+                    <option value="2">PegandoBebidaNaCopa</option>
+                    <option value="3">PratoPronto</option>
+                    <option value="4">Entregue</option>
+                </select>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Salvar" class="btn btn-default" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Voltar para a lista</a>
 </div>
 
 @section Scripts {

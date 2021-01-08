@@ -7,9 +7,9 @@ namespace SistemaPedidos.Models.Enums
 {
     public enum StatusPedido : int
     {
-        Pendete = 0,
-        Visualizado = 1,
-        PegandoBebida = 2,
+        Pendente = 0,
+        VisualizadoPelaCozinha = 1,
+        PegandoBebidaNaCopa = 2,
         PratoPronto = 3,
         Entregue = 4
     }
