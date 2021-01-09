@@ -7,22 +7,29 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SistemaPedidos.Data;
 using SistemaPedidos.Models;
+using SistemaPedidos.Models.ViewModels;
+using SistemaPedidos.Services;
 
 namespace SistemaPedidos.Controllers
 {
     public class PedidosController : Controller
     {
-        private readonly SistemaPedidosContext _context;
+        private readonly PedidoService _pedidoService;
+        private readonly PratoService _pratoService;
+        private readonly BebidaService _bebidaService;
 
-        public PedidosController(SistemaPedidosContext context)
+        public PedidosController(PedidoService pedidosService, PratoService pratoService, BebidaService bebidaService)
         {
-            _context = context;
+            _pedidoService = pedidosService;
+            _pratoService = pratoService;
+            _bebidaService = bebidaService;
         }
 
         // GET: Pedidos
         public async Task<IActionResult> Index()
         {
-            return View(await _context.pedido.ToListAsync());
+            var list = await _pedidoService.FindAllAsync();
+            return View(list);
         }
 
         // GET: Pedidos/Details/5
@@ -33,20 +40,22 @@ namespace SistemaPedidos.Controllers
                 return NotFound();
             }
 
-            var pedido = await _context.pedido
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (pedido == null)
+            var obj = await _pedidoService.FindByIDAsync(id.Value);
+            if (obj == null)
             {
                 return NotFound();
             }
 
-            return View(pedido);
+            return View(obj);
         }
 
         // GET: Pedidos/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var pratos = await _pratoService.FindAllAsync();
+            var bebidas = await _bebidaService.FindAllAsync();
+            var viewModel = new PedidosViewModel { Pratos = pratos, Bebidas = bebidas };
+            return View(viewModel);
         }
 
         // POST: Pedidos/Create
@@ -54,15 +63,17 @@ namespace SistemaPedidos.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Prato,Bebida,Mesa,NomeDoSolicitante,Id,Date,Status")] Pedido pedido)
+        public async Task<IActionResult> Create(Pedido pedido)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(pedido);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var pratos = await _pratoService.FindAllAsync();
+                var bebidas = await _bebidaService.FindAllAsync();
+                var viewModel = new PedidosViewModel { Pedido = pedido, Pratos = pratos, Bebidas = bebidas };
+                return View(viewModel);
             }
-            return View(pedido);
+            await _pedidoService.InsertAsync(pedido);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Pedidos/Edit/5
@@ -73,12 +84,15 @@ namespace SistemaPedidos.Controllers
                 return NotFound();
             }
 
-            var pedido = await _context.pedido.FindAsync(id);
-            if (pedido == null)
+            var obj = await _pedidoService.FindByIDAsync(id.Value);
+            if (obj == null)
             {
                 return NotFound();
             }
-            return View(pedido);
+            List<Prato> pratos = await _pratoService.FindAllAsync();
+            List<Bebida> bebidas = await _bebidaService.FindAllAsync();
+            PedidosViewModel viewModel = new PedidosViewModel { Pedido = obj, Pratos = pratos, Bebidas = bebidas };
+            return View(obj);
         }
 
         // POST: Pedidos/Edit/5
@@ -86,34 +100,28 @@ namespace SistemaPedidos.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Prato,Bebida,Mesa,NomeDoSolicitante,Id,Date,Status")] Pedido pedido)
+        public async Task<IActionResult> Edit(int id, Pedido pedido)
         {
+            if (!ModelState.IsValid)
+            {
+                List<Prato> pratos = await _pratoService.FindAllAsync();
+                List<Bebida> bebidas = await _bebidaService.FindAllAsync();
+                PedidosViewModel viewModel = new PedidosViewModel { Pedido = pedido, Pratos = pratos, Bebidas = bebidas };
+                return View(viewModel);
+            }
             if (id != pedido.Id)
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    _context.Update(pedido);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PedidoExists(pedido.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                await _pedidoService.UpdateAsync(pedido);
                 return RedirectToAction(nameof(Index));
             }
-            return View(pedido);
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
 
         // GET: Pedidos/Delete/5
@@ -124,14 +132,13 @@ namespace SistemaPedidos.Controllers
                 return NotFound();
             }
 
-            var pedido = await _context.pedido
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (pedido == null)
+            var obj = await _pedidoService.FindByIDAsync(id.Value);
+            if (obj == null)
             {
                 return NotFound();
             }
 
-            return View(pedido);
+            return View(obj);
         }
 
         // POST: Pedidos/Delete/5
@@ -139,15 +146,15 @@ namespace SistemaPedidos.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var pedido = await _context.pedido.FindAsync(id);
-            _context.pedido.Remove(pedido);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool PedidoExists(int id)
-        {
-            return _context.pedido.Any(e => e.Id == id);
+            try
+            {
+                await _pedidoService.RemoveAsync(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
 
         // GET: Pedidos/AtualizarStatus/5
@@ -158,7 +165,7 @@ namespace SistemaPedidos.Controllers
                 return NotFound();
             }
 
-            var pedido = await _context.pedido.FindAsync(id);
+            var pedido = await _pedidoService.FindByIDAsync(id.Value);
             if (pedido == null)
             {
                 return NotFound();
@@ -173,32 +180,27 @@ namespace SistemaPedidos.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AtualizarStatus(int id, Pedido pedido)
         {
+            if (ModelState.IsValid)
+            {
+                var pratos = await _pratoService.FindAllAsync();
+                var bebidas = await _bebidaService.FindAllAsync();
+                pedido.Status++;
+                var viewModel = new PedidosViewModel { Pedido = pedido, Bebidas = bebidas, Pratos = pratos };
+                return View(viewModel);
+            }
             if (id != pedido.Id)
             {
                 return NotFound();
             }
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    pedido.Status++;
-                    _context.Update(pedido);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PedidoExists(pedido.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                await _pedidoService.UpdateAsync(pedido);
                 return RedirectToAction(nameof(Index));
             }
-            return RedirectToAction(nameof(Index));
+            catch (Exception e)
+                {
+                throw new Exception(e.Message);
+            }
         }
     }
 }

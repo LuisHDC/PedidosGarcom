@@ -22,7 +22,7 @@ namespace SistemaPedidos.Controllers
         // GET: Pratos
         public async Task<IActionResult> Index()
         {
-            return View(await _context.prato.ToListAsync());
+            return View(await _context.Prato.ToListAsync());
         }
 
         // GET: Pratos/Details/5
@@ -33,7 +33,7 @@ namespace SistemaPedidos.Controllers
                 return NotFound();
             }
 
-            var prato = await _context.prato
+            var prato = await _context.Prato
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (prato == null)
             {
@@ -73,7 +73,7 @@ namespace SistemaPedidos.Controllers
                 return NotFound();
             }
 
-            var prato = await _context.prato.FindAsync(id);
+            var prato = await _context.Prato.FindAsync(id);
             if (prato == null)
             {
                 return NotFound();
@@ -124,7 +124,7 @@ namespace SistemaPedidos.Controllers
                 return NotFound();
             }
 
-            var prato = await _context.prato
+            var prato = await _context.Prato
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (prato == null)
             {
@@ -139,15 +139,15 @@ namespace SistemaPedidos.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var prato = await _context.prato.FindAsync(id);
-            _context.prato.Remove(prato);
+            var prato = await _context.Prato.FindAsync(id);
+            _context.Prato.Remove(prato);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool PratoExists(int id)
         {
-            return _context.prato.Any(e => e.Id == id);
+            return _context.Prato.Any(e => e.Id == id);
         }
     }
 }

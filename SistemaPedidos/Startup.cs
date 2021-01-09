@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SistemaPedidos.Data;
+using SistemaPedidos.Services;
 
 namespace SistemaPedidos
 {
@@ -39,6 +40,9 @@ namespace SistemaPedidos
             services.AddDbContext<SistemaPedidosContext>(options =>
                     options.UseMySql(Configuration.GetConnectionString("SistemaPedidosContext"), builder => builder.MigrationsAssembly("SistemaPedidos")));
             services.AddScoped<ServicoPopularizacao>();
+            services.AddScoped<PratoService>();
+            services.AddScoped<BebidaService>();
+            services.AddScoped<PedidoService>();
         }
             
 

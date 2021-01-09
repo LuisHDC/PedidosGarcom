@@ -10,6 +10,15 @@ namespace SistemaPedidos.Models
         public int Id { get; set; }
         public string Nome { get; set; }
 
+        public Prato()
+        {
+
+        }
+        public Prato(string nome)
+        {
+            Nome = nome;
+        }
+
         public Prato(int id, string nome)
         {
             Id = id;

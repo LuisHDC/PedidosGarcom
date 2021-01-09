@@ -9,7 +9,9 @@ namespace SistemaPedidos.Models
     public class Pedido
     {
         public Prato Prato { get; set; }
+        public int PratoId { get; set; }
         public Bebida Bebida { get; set; }
+        public int BebidaId { get; set; }
         public int Mesa { get; set; }
         public string NomeDoSolicitante { get; set; }
         public int Id { get; set; }
@@ -22,7 +24,7 @@ namespace SistemaPedidos.Models
 
         public Pedido(Prato prato, Bebida bebida, int mesa, string nomeDoSolicitante, int id, DateTime date, StatusPedido status)
         {
-            Prato = prato;
+            Prato= prato;
             Bebida = bebida;
             Mesa = mesa;
             NomeDoSolicitante = nomeDoSolicitante;
@@ -30,5 +32,6 @@ namespace SistemaPedidos.Models
             Date = date;
             Status = status;
         }
+
     }
 }

@@ -12,60 +12,57 @@ namespace SistemaPedidos.Controllers
 {
     public class BebidasController : Controller
     {
-        private readonly SistemaPedidosContext _context;
-
-        public BebidasController(SistemaPedidosContext context)
+        private readonly SistemaPedidosContext _contexto;
+        
+        public BebidasController(SistemaPedidosContext contexto)
         {
-            _context = context;
+            _contexto = contexto;
         }
 
-        // GET: Bebidas
+        //GET: Bebidas
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Bebida.ToListAsync());
+            return View(await _contexto.Bebida.ToListAsync());
         }
-
-        // GET: Bebidas/Details/5
+        
+        //GET: Bebidas/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-
-            var bebida = await _context.Bebida
-                .FirstOrDefaultAsync(m => m.ID == id);
-            if (bebida == null)
+            var bebidas = await _contexto.Bebida.FirstOrDefaultAsync(m => m.Id == id);
+            if(bebidas == null)
             {
                 return NotFound();
             }
-
-            return View(bebida);
+            return View(bebidas);
         }
 
-        // GET: Bebidas/Create
+        //GET: Bebidas/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Bebidas/Create
+        // POST: Departments/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Nome")] Bebida bebida)
+        public async Task<IActionResult> Create(Bebida bebida)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(bebida);
-                await _context.SaveChangesAsync();
+                _contexto.Add(bebida);
+                await _contexto.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(bebida);
         }
 
-        // GET: Bebidas/Edit/5
+        // GET: Departments/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,7 +70,7 @@ namespace SistemaPedidos.Controllers
                 return NotFound();
             }
 
-            var bebida = await _context.Bebida.FindAsync(id);
+            var bebida = await _contexto.Bebida.FindAsync(id);
             if (bebida == null)
             {
                 return NotFound();
@@ -81,14 +78,14 @@ namespace SistemaPedidos.Controllers
             return View(bebida);
         }
 
-        // POST: Bebidas/Edit/5
+        // POST: Departments/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Nome")] Bebida bebida)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome")] Bebida bebida)
         {
-            if (id != bebida.ID)
+            if (id != bebida.Id)
             {
                 return NotFound();
             }
@@ -97,12 +94,12 @@ namespace SistemaPedidos.Controllers
             {
                 try
                 {
-                    _context.Update(bebida);
-                    await _context.SaveChangesAsync();
+                    _contexto.Update(bebida);
+                    await _contexto.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!BebidaExists(bebida.ID))
+                    if (!BebidaExists(bebida.Id))
                     {
                         return NotFound();
                     }
@@ -116,7 +113,7 @@ namespace SistemaPedidos.Controllers
             return View(bebida);
         }
 
-        // GET: Bebidas/Delete/5
+        // GET: Departments/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,8 +121,8 @@ namespace SistemaPedidos.Controllers
                 return NotFound();
             }
 
-            var bebida = await _context.Bebida
-                .FirstOrDefaultAsync(m => m.ID == id);
+            var bebida = await _contexto.Bebida
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (bebida == null)
             {
                 return NotFound();
@@ -134,20 +131,20 @@ namespace SistemaPedidos.Controllers
             return View(bebida);
         }
 
-        // POST: Bebidas/Delete/5
+        // POST: Departments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var bebida = await _context.Bebida.FindAsync(id);
-            _context.Bebida.Remove(bebida);
-            await _context.SaveChangesAsync();
+            var department = await _contexto.Bebida.FindAsync(id);
+            _contexto.Bebida.Remove(department);
+            await _contexto.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool BebidaExists(int id)
         {
-            return _context.Bebida.Any(e => e.ID == id);
+            return _contexto.Bebida.Any(e => e.Id == id);
         }
     }
 }

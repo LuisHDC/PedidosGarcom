@@ -1,4 +1,4 @@
-﻿@model SistemaPedidos.Models.Pedido
+﻿@model SistemaPedidos.Models.ViewModels.PedidosViewModel
 
 @{
     ViewData["Title"] = "Editar";
@@ -13,34 +13,34 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Prato" class="control-label"></label>
-                <input asp-for="Prato" class="form-control" />
-                <span asp-validation-for="Prato" class="text-danger"></span>
+                <label asp-for="Pedido.Prato" class="control-label"></label>
+                <select asp-for="Pedido.Prato.Id" asp-items="@(new SelectList(Model.Pratos, "Id",
+            "Nome"))" class="form-control"></select>
             </div>
             <div class="form-group">
-                <label asp-for="Bebida" class="control-label"></label>
-                <input asp-for="Bebida" class="form-control" />
-                <span asp-validation-for="Bebida" class="text-danger"></span>
+                <label asp-for="Pedido.Bebida" class="control-label"></label>
+                <select asp-for="Pedido.Bebida.Id" asp-items="@(new SelectList(Model.Bebidas, "Id",
+            "Nome"))" class="form-control"></select>
             </div>
             <div class="form-group">
-                <label asp-for="Mesa" class="control-label"></label>
-                <input asp-for="Mesa" class="form-control" />
-                <span asp-validation-for="Mesa" class="text-danger"></span>
+                <label asp-for="Pedido.Mesa" class="control-label"></label>
+                <input asp-for="Pedido.Mesa" class="form-control" />
+                <span asp-validation-for="Pedido.Mesa" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="NomeDoSolicitante" class="control-label"></label>
-                <input asp-for="NomeDoSolicitante" class="form-control" />
-                <span asp-validation-for="NomeDoSolicitante" class="text-danger"></span>
+                <label asp-for="Pedido.NomeDoSolicitante" class="control-label"></label>
+                <input asp-for="Pedido.NomeDoSolicitante" class="form-control" />
+                <span asp-validation-for="Pedido.NomeDoSolicitante" class="text-danger"></span>
             </div>
-            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Pedido.Id" />
             <div class="form-group">
-                <label asp-for="Date" class="control-label"></label>
-                <input asp-for="Date" class="form-control" />
-                <span asp-validation-for="Date" class="text-danger"></span>
+                <label asp-for="Pedido.Date" class="control-label"></label>
+                <input asp-for="Pedido.Date" class="form-control" />
+                <span asp-validation-for="Pedido.Date" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <select asp-for="Status">
+                <label asp-for="Pedido.Status" class="control-label"></label>
+                <select asp-for="Pedido.Status">
                     <option value="0">Pendente</option>
                     <option value="1">VisualizadoPelaCozinha</option>
                     <option value="2">PegandoBebidaNaCopa</option>
