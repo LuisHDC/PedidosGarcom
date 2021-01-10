@@ -9,8 +9,8 @@ using SistemaPedidos.Data;
 namespace SistemaPedidos.Migrations
 {
     [DbContext(typeof(SistemaPedidosContext))]
-    [Migration("20210109025311_Teste4")]
-    partial class Teste4
+    [Migration("20210110183815_Teste")]
+    partial class Teste
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -38,11 +38,12 @@ namespace SistemaPedidos.Migrations
 
                     b.Property<int>("BebidaId");
 
-                    b.Property<DateTime>("Date");
+                    b.Property<DateTime>("Data");
 
                     b.Property<int>("Mesa");
 
-                    b.Property<string>("NomeDoSolicitante");
+                    b.Property<string>("NomeDoSolicitante")
+                        .IsRequired();
 
                     b.Property<int>("PratoId");
 

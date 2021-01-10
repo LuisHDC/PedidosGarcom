@@ -36,11 +36,12 @@ namespace SistemaPedidos.Migrations
 
                     b.Property<int>("BebidaId");
 
-                    b.Property<DateTime>("Date");
+                    b.Property<DateTime>("Data");
 
                     b.Property<int>("Mesa");
 
-                    b.Property<string>("NomeDoSolicitante");
+                    b.Property<string>("NomeDoSolicitante")
+                        .IsRequired();
 
                     b.Property<int>("PratoId");
 

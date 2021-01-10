@@ -40,9 +40,9 @@ namespace SistemaPedidos
             services.AddDbContext<SistemaPedidosContext>(options =>
                     options.UseMySql(Configuration.GetConnectionString("SistemaPedidosContext"), builder => builder.MigrationsAssembly("SistemaPedidos")));
             services.AddScoped<ServicoPopularizacao>();
+            services.AddScoped<PedidoService>();
             services.AddScoped<PratoService>();
             services.AddScoped<BebidaService>();
-            services.AddScoped<PedidoService>();
         }
             
 

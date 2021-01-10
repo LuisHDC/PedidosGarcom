@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SistemaPedidos.Data;
 using SistemaPedidos.Models;
+using SistemaPedidos.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,36 +11,36 @@ namespace SistemaPedidos.Services
 {
     public class PedidoService
     {
-        private readonly SistemaPedidosContext _contexto;
+        private readonly SistemaPedidosContext _context;
 
-        public PedidoService(SistemaPedidosContext contexto)
+        public PedidoService(SistemaPedidosContext context)
         {
-            _contexto = contexto;
+            _context = context;
         }
 
         public async Task<List<Pedido>> FindAllAsync()
         {
-            return await _contexto.Pedido.OrderBy(x => x.Id).ToListAsync();
+            return await _context.Pedido.Include(c => c.Prato).Include(c => c.Bebida).OrderBy(x => x.Id).ToListAsync();
         }
 
         public async Task InsertAsync(Pedido obj)
         {
-            _contexto.Add(obj);
-            await _contexto.SaveChangesAsync();
+            _context.Add(obj);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<Pedido> FindByIDAsync(int id)
         {
-            return await _contexto.Pedido.FirstOrDefaultAsync(obj => obj.Id == id);
+            return await _context.Pedido.Include(obj => obj.Bebida).Include(obj => obj.Prato).FirstOrDefaultAsync(obj => obj.Id == id);
         }
 
         public async Task RemoveAsync(int id)
         {
             try
             {
-                var obj = await _contexto.Pedido.FindAsync(id);
-                _contexto.Pedido.Remove(obj);
-                await _contexto.SaveChangesAsync();
+                var obj = await _context.Pedido.FindAsync(id);
+                _context.Pedido.Remove(obj);
+                await _context.SaveChangesAsync();
             }
             catch (Exception e)
             {
@@ -49,15 +50,15 @@ namespace SistemaPedidos.Services
 
         public async Task UpdateAsync(Pedido obj)
         {
-            bool hasAny = await _contexto.Pedido.AnyAsync(x => x.Id == obj.Id);
+            bool hasAny = await _context.Pedido.AnyAsync(x => x.Id == obj.Id);
             if (!hasAny)
             {
                 throw new Exception("Id not found");
             }
             try
             {
-                _contexto.Update(obj);
-                await _contexto.SaveChangesAsync();
+                _context.Update(obj);
+                await _context.SaveChangesAsync();
             }
             catch (Exception e)
             {

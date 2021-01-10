@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SistemaPedidos.Data;
 using SistemaPedidos.Models;
+using SistemaPedidos.Models.Enums;
 using SistemaPedidos.Models.ViewModels;
 using SistemaPedidos.Services;
 
@@ -17,12 +18,14 @@ namespace SistemaPedidos.Controllers
         private readonly PedidoService _pedidoService;
         private readonly PratoService _pratoService;
         private readonly BebidaService _bebidaService;
+        private readonly SistemaPedidosContext _context;
 
-        public PedidosController(PedidoService pedidosService, PratoService pratoService, BebidaService bebidaService)
+        public PedidosController(PedidoService pedidosService, PratoService pratoService, BebidaService bebidaService, SistemaPedidosContext context)
         {
             _pedidoService = pedidosService;
             _pratoService = pratoService;
             _bebidaService = bebidaService;
+            _context = context;
         }
 
         // GET: Pedidos
@@ -40,13 +43,16 @@ namespace SistemaPedidos.Controllers
                 return NotFound();
             }
 
+            var pratos = await _pratoService.FindAllAsync();
+            var bebidas = await _bebidaService.FindAllAsync();
             var obj = await _pedidoService.FindByIDAsync(id.Value);
+            var viewModel = new PedidosViewModel { Pedido = obj,Pratos = pratos, Bebidas = bebidas };
             if (obj == null)
             {
                 return NotFound();
             }
 
-            return View(obj);
+            return View(viewModel);
         }
 
         // GET: Pedidos/Create
@@ -54,7 +60,7 @@ namespace SistemaPedidos.Controllers
         {
             var pratos = await _pratoService.FindAllAsync();
             var bebidas = await _bebidaService.FindAllAsync();
-            var viewModel = new PedidosViewModel { Pratos = pratos, Bebidas = bebidas };
+            var viewModel = new PedidosViewModel {Pratos = pratos, Bebidas = bebidas };
             return View(viewModel);
         }
 
@@ -72,12 +78,13 @@ namespace SistemaPedidos.Controllers
                 var viewModel = new PedidosViewModel { Pedido = pedido, Pratos = pratos, Bebidas = bebidas };
                 return View(viewModel);
             }
+            pedido.Status = StatusPedido.Pendente;
             await _pedidoService.InsertAsync(pedido);
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Pedidos/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+            // GET: Pedidos/Edit/5
+            public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
@@ -85,14 +92,16 @@ namespace SistemaPedidos.Controllers
             }
 
             var obj = await _pedidoService.FindByIDAsync(id.Value);
+
             if (obj == null)
             {
                 return NotFound();
             }
-            List<Prato> pratos = await _pratoService.FindAllAsync();
-            List<Bebida> bebidas = await _bebidaService.FindAllAsync();
-            PedidosViewModel viewModel = new PedidosViewModel { Pedido = obj, Pratos = pratos, Bebidas = bebidas };
-            return View(obj);
+
+            var pratos = await _pratoService.FindAllAsync();
+            var bebidas = await _bebidaService.FindAllAsync();
+            var viewModel = new PedidosViewModel { Pedido = obj, Pratos = pratos, Bebidas = bebidas };
+            return View(viewModel);
         }
 
         // POST: Pedidos/Edit/5
@@ -115,6 +124,7 @@ namespace SistemaPedidos.Controllers
             }
             try
             {
+
                 await _pedidoService.UpdateAsync(pedido);
                 return RedirectToAction(nameof(Index));
             }
@@ -133,12 +143,15 @@ namespace SistemaPedidos.Controllers
             }
 
             var obj = await _pedidoService.FindByIDAsync(id.Value);
+            var pratos = await _pratoService.FindAllAsync();
+            var bebidas = await _bebidaService.FindAllAsync();
+            var viewModel = new PedidosViewModel { Pedido = obj, Pratos = pratos, Bebidas = bebidas };
             if (obj == null)
             {
                 return NotFound();
             }
 
-            return View(obj);
+            return View(viewModel);
         }
 
         // POST: Pedidos/Delete/5
@@ -170,37 +183,10 @@ namespace SistemaPedidos.Controllers
             {
                 return NotFound();
             }
-            return View(pedido);
-        }
-
-        // POST: Pedidos/AtualizarStatus/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AtualizarStatus(int id, Pedido pedido)
-        {
-            if (ModelState.IsValid)
-            {
-                var pratos = await _pratoService.FindAllAsync();
-                var bebidas = await _bebidaService.FindAllAsync();
+            if (pedido.Status < StatusPedido.Entregue)
                 pedido.Status++;
-                var viewModel = new PedidosViewModel { Pedido = pedido, Bebidas = bebidas, Pratos = pratos };
-                return View(viewModel);
-            }
-            if (id != pedido.Id)
-            {
-                return NotFound();
-            }
-            try
-            {
                 await _pedidoService.UpdateAsync(pedido);
-                return RedirectToAction(nameof(Index));
-            }
-            catch (Exception e)
-                {
-                throw new Exception(e.Message);
-            }
+            return RedirectToAction(nameof(Index));
         }
     }
 }

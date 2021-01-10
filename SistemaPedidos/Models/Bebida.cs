@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -7,17 +9,17 @@ namespace SistemaPedidos.Models
 {
     public class Bebida
     {
-        public string Nome { get; set; }
         public int Id { get; set; }
+        public string Nome { get; set; }
 
         public Bebida()
         {
 
         }
-        public Bebida(string nome, int id)
+        public Bebida(int id, string nome)
         {
-            Nome = nome;
             Id = id;
+            Nome = nome;
         }
     }
 }

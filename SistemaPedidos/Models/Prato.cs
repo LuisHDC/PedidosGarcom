@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,10 +15,6 @@ namespace SistemaPedidos.Models
         public Prato()
         {
 
-        }
-        public Prato(string nome)
-        {
-            Nome = nome;
         }
 
         public Prato(int id, string nome)

@@ -1,54 +1,54 @@
-﻿@model SistemaPedidos.Models.Pedido
+﻿@model SistemaPedidos.Models.ViewModels.PedidosViewModel
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h2>Details</h2>
+<h2>Detalhes</h2>
 
 <div>
     <h4>Pedido</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Prato)
+            @Html.DisplayNameFor(model => model.Pedido.Prato)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Prato)
+            @Html.DisplayFor(model => model.Pedido.Prato.Nome)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Bebida)
+            @Html.DisplayNameFor(model => model.Pedido.Bebida)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Bebida)
+            @Html.DisplayFor(model => model.Pedido.Bebida.Nome)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Mesa)
+            @Html.DisplayNameFor(model => model.Pedido.Mesa)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Mesa)
+            @Html.DisplayFor(model => model.Pedido.Mesa)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.NomeDoSolicitante)
+            @Html.DisplayNameFor(model => model.Pedido.NomeDoSolicitante)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.NomeDoSolicitante)
+            @Html.DisplayFor(model => model.Pedido.NomeDoSolicitante)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Date)
+            @Html.DisplayNameFor(model => model.Pedido.Data)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Date)
+            @Html.DisplayFor(model => model.Pedido.Data)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Status)
+            @Html.DisplayNameFor(model => model.Pedido.Status)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Status)
+            @Html.DisplayFor(model => model.Pedido.Status)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Editar" asp-route-id="@Model.Pedido.Id">Editar</a> |
+    <a asp-action="Index">Voltar para a lista</a>
 </div>
