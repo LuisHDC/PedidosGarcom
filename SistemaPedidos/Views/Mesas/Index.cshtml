@@ -1,0 +1,35 @@
+﻿@model IEnumerable<SistemaPedidos.Models.Mesa>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Adicionar Nova</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">Pedidos</a> |
+                    <a asp-action="Create" asp-controller="Pedidos" asp-route-id="@item.Id">Adicionar pedido</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

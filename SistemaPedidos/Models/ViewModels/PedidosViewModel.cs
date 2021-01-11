@@ -10,5 +10,6 @@ namespace SistemaPedidos.Models.ViewModels
         public Pedido Pedido { get; set; }
         public ICollection<Prato> Pratos { get; set; }
         public ICollection<Bebida> Bebidas { get; set; }
+        public Mesa Mesa { get; set; }
     }
 }

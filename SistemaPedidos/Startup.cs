@@ -43,6 +43,7 @@ namespace SistemaPedidos
             services.AddScoped<PedidoService>();
             services.AddScoped<PratoService>();
             services.AddScoped<BebidaService>();
+            services.AddScoped<MesaService>();
         }
             
 

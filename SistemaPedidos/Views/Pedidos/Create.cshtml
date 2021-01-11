@@ -24,8 +24,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="Pedido.Mesa" class="control-label"></label>
-                <input asp-for="Pedido.Mesa" class="form-control" />
-                <span asp-validation-for="Pedido.Mesa" class="text-danger"></span>
+                <input asp-for="Pedido.MesaId" class="form-control" readonly="@(true)" />
+                <span asp-validation-for="Pedido.MesaId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Pedido.NomeDoSolicitante" class="control-label"></label>
@@ -45,7 +45,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Voltar para a lista</a>
+    <a asp-action="Index"  asp-route-id="@Html.ValueFor(model => model.Pedido.MesaId)">Voltar para a lista</a>
 </div>
 
 @section Scripts {

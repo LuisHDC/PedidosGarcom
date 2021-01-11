@@ -17,5 +17,6 @@ namespace SistemaPedidos.Data
         public DbSet<Pedido> Pedido { get; set; }
         public DbSet<Prato> Prato { get; set; }
         public  DbSet<Bebida> Bebida { get; set; }
+        public DbSet<Mesa> Mesa { get; set; }
     }
 }

@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SistemaPedidos.Data;
 
 namespace SistemaPedidos.Migrations
 {
     [DbContext(typeof(SistemaPedidosContext))]
-    partial class SistemaPedidosContextModelSnapshot : ModelSnapshot
+    [Migration("20210111141924_ClasseMesa")]
+    partial class ClasseMesa
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

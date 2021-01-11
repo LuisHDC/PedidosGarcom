@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using SistemaPedidos.Data;
 using SistemaPedidos.Models;
@@ -18,21 +19,19 @@ namespace SistemaPedidos.Controllers
         private readonly PedidoService _pedidoService;
         private readonly PratoService _pratoService;
         private readonly BebidaService _bebidaService;
-        private readonly SistemaPedidosContext _context;
 
-        public PedidosController(PedidoService pedidosService, PratoService pratoService, BebidaService bebidaService, SistemaPedidosContext context)
+        public PedidosController(PedidoService pedidosService, PratoService pratoService, BebidaService bebidaService)
         {
             _pedidoService = pedidosService;
             _pratoService = pratoService;
             _bebidaService = bebidaService;
-            _context = context;
         }
 
         // GET: Pedidos
-        public async Task<IActionResult> Index()
+        public IActionResult Index(int? id)
         {
-            var list = await _pedidoService.FindAllAsync();
-            return View(list);
+            return RedirectToAction("Details", new RouteValueDictionary(
+     new { controller = "Mesas", action = "Details", Id = id}));
         }
 
         // GET: Pedidos/Details/5
@@ -56,11 +55,16 @@ namespace SistemaPedidos.Controllers
         }
 
         // GET: Pedidos/Create
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create(int? Id)
         {
+            if (Id == null)
+            {
+                return NotFound();
+            }
             var pratos = await _pratoService.FindAllAsync();
             var bebidas = await _bebidaService.FindAllAsync();
-            var viewModel = new PedidosViewModel {Pratos = pratos, Bebidas = bebidas };
+            var pedido = new Pedido { MesaId=Id.Value };
+            var viewModel = new PedidosViewModel { Pedido = pedido,  Pratos = pratos, Bebidas = bebidas };
             return View(viewModel);
         }
 
@@ -80,7 +84,8 @@ namespace SistemaPedidos.Controllers
             }
             pedido.Status = StatusPedido.Pendente;
             await _pedidoService.InsertAsync(pedido);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Details", new RouteValueDictionary(
+     new { controller = "Mesas", action = "Details", Id = pedido.MesaId}));
         }
 
             // GET: Pedidos/Edit/5
@@ -126,7 +131,8 @@ namespace SistemaPedidos.Controllers
             {
 
                 await _pedidoService.UpdateAsync(pedido);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", new RouteValueDictionary(
+     new { controller = "Mesas", action = "Details", Id = pedido.MesaId }));
             }
             catch (Exception e)
             {
@@ -161,8 +167,10 @@ namespace SistemaPedidos.Controllers
         {
             try
             {
+                Pedido pedido = await _pedidoService.FindByIDAsync(id);
                 await _pedidoService.RemoveAsync(id);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", new RouteValueDictionary(
+     new { controller = "Mesas", action = "Details", Id = pedido.MesaId }));
             }
             catch (Exception e)
             {
@@ -186,7 +194,8 @@ namespace SistemaPedidos.Controllers
             if (pedido.Status < StatusPedido.Entregue)
                 pedido.Status++;
                 await _pedidoService.UpdateAsync(pedido);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Details", new RouteValueDictionary(
+     new { controller = "Mesas", action = "Details", Id = pedido.MesaId }));
         }
     }
 }

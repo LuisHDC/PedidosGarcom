@@ -19,10 +19,22 @@ namespace SistemaPedidos.Data
         {
             if(_contexto.Pedido.Any() ||
                 _contexto.Prato.Any() ||
-                _contexto.Bebida.Any())
+                _contexto.Bebida.Any() ||
+                _contexto.Mesa.Any())
             {
                 return;
             }
+
+            Mesa m1 = new Mesa(1);
+            Mesa m2 = new Mesa(2);
+            Mesa m3 = new Mesa(3);
+            Mesa m4 = new Mesa(4);
+            Mesa m5 = new Mesa(5);
+            Mesa m6 = new Mesa(6);
+            Mesa m7 = new Mesa(7);
+            Mesa m8 = new Mesa(8);
+            Mesa m9 = new Mesa(9);
+            Mesa m10 = new Mesa(10);
 
             Prato p0 = new Prato(1, "Nada");
             Prato p1 = new Prato(2, "Macarronada");
@@ -43,11 +55,13 @@ namespace SistemaPedidos.Data
             Bebida b4 = new Bebida(5, "Água com gás");
             Bebida b5 = new Bebida(6, "Água Mineral");
 
-            Pedido P1 = new Pedido(p1, b5, 3, "Paulo", 1, new DateTime(2020, 02, 15), Models.Enums.StatusPedido.Pendente);
-            Pedido P2 = new Pedido(p5, b3, 4, "Sauro", 2, new DateTime(2020, 02, 15), Models.Enums.StatusPedido.VisualizadoPelaCozinha);
-            Pedido P3 = new Pedido(p3, b2, 2, "Jennifer", 3, new DateTime(2020, 02, 15), Models.Enums.StatusPedido.PratoPronto);
-            Pedido P4 = new Pedido(p7, b4, 8, "Luiza", 4, new DateTime(2020, 02, 15), Models.Enums.StatusPedido.Entregue);
-            Pedido P5 = new Pedido(p9, b5, 9, "Matheus", 5, new DateTime(2020, 02, 15), Models.Enums.StatusPedido.PegandoBebidaNaCopa);
+            Pedido P1 = new Pedido(p1, b5, m1, "Paulo", 1, new DateTime(2020, 02, 15), Models.Enums.StatusPedido.Pendente);
+            Pedido P2 = new Pedido(p5, b3, m2, "Sauro", 2, new DateTime(2020, 02, 15), Models.Enums.StatusPedido.VisualizadoPelaCozinha);
+            Pedido P3 = new Pedido(p3, b2, m3, "Jennifer", 3, new DateTime(2020, 02, 15), Models.Enums.StatusPedido.PratoPronto);
+            Pedido P4 = new Pedido(p7, b4, m4, "Luiza", 4, new DateTime(2020, 02, 15), Models.Enums.StatusPedido.Entregue);
+            Pedido P5 = new Pedido(p9, b5, m5, "Matheus", 5, new DateTime(2020, 02, 15), Models.Enums.StatusPedido.PegandoBebidaNaCopa);
+
+            _contexto.Mesa.AddRange(m1, m2, m3, m4, m5, m6, m7, m8, m9, m10);
 
             _contexto.Pedido.AddRange(P1, P2, P3, P4, P5);
 

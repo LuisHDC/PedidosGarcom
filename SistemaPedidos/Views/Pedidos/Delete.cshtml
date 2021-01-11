@@ -27,7 +27,7 @@
             @Html.DisplayNameFor(model => model.Pedido.Mesa)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Pedido.Mesa)
+            @Html.DisplayFor(model => model.Pedido.MesaId)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Pedido.NomeDoSolicitante)
@@ -52,6 +52,6 @@
     <form asp-action="Delete">
         <input type="hidden" asp-for="Pedido.Id" />
         <input type="submit" value="Deletar" class="btn btn-default" /> |
-        <a asp-action="Index">Voltar para a lista</a>
+        <a asp-action="Index" asp-route-id="@Html.ValueFor(model => model.Pedido.MesaId)">Voltar para a lista</a>
     </form>
 </div>

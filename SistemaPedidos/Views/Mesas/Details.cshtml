@@ -1,0 +1,61 @@
+﻿@model IEnumerable<SistemaPedidos.Models.Pedido>
+
+@{
+    ViewData["Title"] = "Pedidos";
+}
+
+<h2>Pedidos da mesa @Html.DisplayFor(model => model.First().MesaId)</h2>
+
+<p>
+    <a asp-action="AdicionarPedido" asp-route-id="@Html.ValueFor(model => model.First().MesaId)">Novo Pedido</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Prato)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bebida)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NomeDoSolicitante)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Data)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Prato.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Bebida.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NomeDoSolicitante)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Data)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
+                    <a asp-action="Details" asp-controller="Pedidos" asp-route-id="@item.Id">Detalhes</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Deletar</a> |
+                    <a asp-action="AtualizarStatus" asp-controller="Pedidos" asp-route-id="@item.Id">Atualizar Status</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

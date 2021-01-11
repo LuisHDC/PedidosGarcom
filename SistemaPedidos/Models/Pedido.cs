@@ -17,10 +17,8 @@ namespace SistemaPedidos.Models
         [Display(Name = "Nome do Solicitante")]
         [Required(ErrorMessage = "O nome do solicitante é obrigatório.", AllowEmptyStrings = false)]
         public string NomeDoSolicitante { get; set; }
-        [Required(ErrorMessage = "O número da mesa é obrigatório e deve ser de 1 a 30.")]
-        [Display(Name = "Mesa", Description = "Informe um número de mesa de 1 a 30.")]
-        [Range(1, 30)]
-        public int Mesa { get; set; }
+        public Mesa Mesa { get; set; }
+        public int MesaId { get; set; }
         public int Id { get; set; }
         [Required(ErrorMessage = "A data do pedido é obrigatória.")]
         public DateTime Data { get; set; }
@@ -31,7 +29,7 @@ namespace SistemaPedidos.Models
             
         }
 
-        public Pedido(Prato prato, Bebida bebida, int mesa, string nomeDoSolicitante, int id, DateTime data, StatusPedido status)
+        public Pedido(Prato prato, Bebida bebida, Mesa mesa, string nomeDoSolicitante, int id, DateTime data, StatusPedido status)
         {
             Prato = prato;
             Bebida = bebida;
